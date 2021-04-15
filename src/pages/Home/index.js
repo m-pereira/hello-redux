@@ -12,7 +12,7 @@ const Home = (props) => {
   const onSuccess = (data) => {
     setProducts(data);
   };
-  const onError = (e) => console.log(`Deu ruim: ${e}`);
+  const onError = (e) => alert(`Deu ruim: ${e}`);
   const onEnd = () => setLoading(false);
 
   const handleAddProduct = (product) => {
@@ -54,7 +54,7 @@ const Home = (props) => {
 };
 
 Home.propTypes = {
-  dispatch: PropTypes.object,
+  dispatch: PropTypes.func,
 };
 
 export default connect()(Home);

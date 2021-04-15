@@ -25,7 +25,7 @@ function Header({ cartSize }) {
 }
 
 Header.propTypes = {
-  cartSize: PropTypes.object,
+  cartSize: PropTypes.number,
 };
 
 export default connect((state) => ({
