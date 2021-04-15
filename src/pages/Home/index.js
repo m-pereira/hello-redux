@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
 import { ProductList } from './styles';
 import { MdAddShoppingCart } from 'react-icons/md';
+import PropTypes from 'prop-types';
 import homePage from '../../services/homePage';
 
-const Home = () => {
+const Home = (props) => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -12,6 +14,15 @@ const Home = () => {
   };
   const onError = (e) => console.log(`Deu ruim: ${e}`);
   const onEnd = () => setLoading(false);
+
+  const handleAddProduct = (product) => {
+    const { dispatch } = props;
+
+    dispatch({
+      type: 'ADD_TO_CART',
+      product,
+    });
+  };
 
   useEffect(async () => {
     homePage({ onSuccess, onError, onEnd });
@@ -29,7 +40,7 @@ const Home = () => {
           <strong>{product.title}</strong>
           <span>{product.priceFormatted}</span>
 
-          <button type='button'>
+          <button type='button' onClick={() => handleAddProduct(product)}>
             <div>
               <MdAddShoppingCart size={16} color='#fff' /> 3
             </div>
@@ -42,4 +53,8 @@ const Home = () => {
   );
 };
 
-export default Home;
+Home.propTypes = {
+  dispatch: PropTypes.object,
+};
+
+export default connect()(Home);
