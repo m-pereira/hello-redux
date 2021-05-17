@@ -7,7 +7,7 @@ import homePage from '../../services/homePage';
 import * as CartActions from '../../store/modules/cart/actions';
 import { bindActionCreators } from 'redux';
 
-const Home = ({ addToCart, cartAmount }) => {
+const Home = ({ addToCartRequest, cartAmount }) => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -33,7 +33,7 @@ const Home = ({ addToCart, cartAmount }) => {
           <strong>{product.title}</strong>
           <span>{product.priceFormatted}</span>
 
-          <button type='button' onClick={() => addToCart(product)}>
+          <button type='button' onClick={() => addToCartRequest(product.id)}>
             <div>
               <MdAddShoppingCart size={16} color='#fff' />{' '}
               {cartAmount[product.id] || 0}
@@ -48,7 +48,7 @@ const Home = ({ addToCart, cartAmount }) => {
 };
 
 Home.propTypes = {
-  addToCart: PropTypes.func,
+  addToCartRequest: PropTypes.func,
   cartAmount: PropTypes.object,
 };
 
