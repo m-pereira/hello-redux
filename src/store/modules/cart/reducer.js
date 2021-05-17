@@ -1,11 +1,12 @@
 // with immer we can create an draft of reducer, apply changes on it
 // and then pass this draft as new reducer
+import * as CartTypes from './types';
 import produce from 'immer';
 
 // createStore needs a reducer, that is a function
 const cart = (state = [], action) => {
   switch (action.type) {
-    case '@cart/ADD':
+    case CartTypes.CART_ADD_SUCCESS:
       return produce(state, (draft) => {
         const productIndex = draft.findIndex((p) => p.id == action.product.id);
 
@@ -15,7 +16,7 @@ const cart = (state = [], action) => {
           draft.push({ ...action.product, amount: 1 });
         }
       });
-    case '@cart/REMOVE':
+    case CartTypes.CART_REMOVE:
       return produce(state, (draft) => {
         const productIndex = draft.findIndex((p) => p.id == action.id);
 
@@ -23,7 +24,7 @@ const cart = (state = [], action) => {
           draft.splice(productIndex, 1);
         }
       });
-    case '@cart/UPDATE_AMOUNT': {
+    case CartTypes.CART_UPDATE_AMOUNT: {
       if (action.amount < 1) {
         return state;
       }
