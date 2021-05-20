@@ -11,6 +11,7 @@ import { call, put, all, takeLatest, select } from 'redux-saga/effects';
 import { addToCartSuccess, updateAmount } from './actions';
 import { CART_ADD_REQUEST } from './types';
 import { formatPrice } from '../../../utils/formatPrice';
+import { toast } from 'react-toastify';
 
 // parecido com async await, porem usando generators que tem mais funcionalidades
 function* addToCart({ id }) {
@@ -24,7 +25,7 @@ function* addToCart({ id }) {
   const amount = currentAmount + 1;
 
   if (amount > stockAmount) {
-    console.tron.warn('Erro de stock');
+    toast.error('Quantidade fora de estoque');
     return;
   }
 
