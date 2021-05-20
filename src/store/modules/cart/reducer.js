@@ -20,11 +20,7 @@ const cart = (state = [], action) => {
           draft.splice(productIndex, 1);
         }
       });
-    case CartTypes.CART_UPDATE_AMOUNT: {
-      if (action.amount < 1) {
-        return state;
-      }
-
+    case CartTypes.CART_UPDATE_AMOUNT_SUCCESS: {
       return produce(state, (draft) => {
         const productIndex = draft.findIndex((p) => p.id == action.id);
 

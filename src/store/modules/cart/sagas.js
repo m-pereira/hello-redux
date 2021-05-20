@@ -8,8 +8,8 @@ import api from '../../../services/api';
 // select: responsavel por buscar informações dentro do estado redux;
 // sempre que usar um effect de redux-saga, é preciso chamar o yield;
 import { call, put, all, takeLatest, select } from 'redux-saga/effects';
-import { addToCartSuccess, updateAmount } from './actions';
-import { CART_ADD_REQUEST } from './types';
+import { addToCartSuccess, updateAmountSuccess } from './actions';
+import { CART_ADD_REQUEST, CART_UPDATE_AMOUNT_REQUEST } from './types';
 import { formatPrice } from '../../../utils/formatPrice';
 import { toast } from 'react-toastify';
 
@@ -30,7 +30,7 @@ function* addToCart({ id }) {
   }
 
   if (productExists) {
-    yield put(updateAmount(id, amount));
+    yield put(updateAmountSuccess(id, amount));
   } else {
     const response = yield call(api.get, `/products/${id}`);
 
@@ -44,4 +44,21 @@ function* addToCart({ id }) {
   }
 }
 
-export default all([takeLatest(CART_ADD_REQUEST, addToCart)]);
+function* updateAmount({ id, amount }) {
+  if (amount <= 0) return;
+
+  const stock = yield call(api.get, `/stock/${id}`);
+  const stockAmount = stock.data.amount;
+
+  if (amount > stockAmount) {
+    toast.error('Quantidade fora de estoque');
+    return;
+  }
+
+  yield put(updateAmountSuccess(id, amount));
+}
+
+export default all([
+  takeLatest(CART_ADD_REQUEST, addToCart),
+  takeLatest(CART_UPDATE_AMOUNT_REQUEST, updateAmount),
+]);

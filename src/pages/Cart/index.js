@@ -11,13 +11,11 @@ import { formatPrice } from '../../utils/formatPrice';
 import PropTypes from 'prop-types';
 import * as CartActions from '../../store/modules/cart/actions';
 
-function Cart({ cart, total, removeFromCart, updateAmount }) {
-  const increment = (product) => {
-    updateAmount(product.id, product.amount + 1);
-  };
-  const decrement = (product) => {
-    updateAmount(product.id, product.amount - 1);
-  };
+function Cart({ cart, total, removeFromCart, updateAmountRequest }) {
+  const increment = (product) =>
+    updateAmountRequest(product.id, product.amount + 1);
+  const decrement = (product) =>
+    updateAmountRequest(product.id, product.amount - 1);
 
   return (
     <Container>
@@ -91,7 +89,7 @@ Cart.propTypes = {
   cart: PropTypes.array,
   total: PropTypes.string,
   removeFromCart: PropTypes.func,
-  updateAmount: PropTypes.func,
+  updateAmountRequest: PropTypes.func,
 };
 
 const mapStateToProps = (state) => ({
