@@ -1,4 +1,5 @@
 import api from '../../../services/api';
+import history from '../../../services/history';
 // call: responsavel por chamar metodos assincronos, retorna uma Promise;
 // put: dispara uma action do redux;
 // all: cadastrar listeners;
@@ -41,6 +42,11 @@ function* addToCart({ id }) {
     };
 
     yield put(addToCartSuccess(data));
+
+    // se voce precisa executar alguma tarefa, apos o Saga ser executado precisamos executar essa tarefa
+    // direto de dentro do SAGA. O JS nao, mesmo com uma função async await nao espera a execução do Saga.
+    // Por isso precisamos usar a navegação desse forma.
+    history.push('/cart');
   }
 }
 

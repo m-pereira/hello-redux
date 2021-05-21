@@ -11,9 +11,7 @@ const Home = ({ addToCartRequest, cartAmount }) => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const onSuccess = (data) => {
-    setProducts(data);
-  };
+  const onSuccess = (data) => setProducts(data);
   const onError = (e) => alert(`Deu ruim: ${e}`);
   const onEnd = () => setLoading(false);
 
