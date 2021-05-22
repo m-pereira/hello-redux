@@ -1,22 +1,36 @@
 import React, { useState, useEffect } from 'react';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { ProductList } from './styles';
 import { MdAddShoppingCart } from 'react-icons/md';
-import PropTypes from 'prop-types';
 import homePage from '../../services/homePage';
 import * as CartActions from '../../store/modules/cart/actions';
-import { bindActionCreators } from 'redux';
 
-const Home = ({ addToCartRequest, cartAmount }) => {
+const Home = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const amount = useSelector((state) =>
+    state.cart.reduce((amount, product) => {
+      amount[product.id] = product.amount;
+
+      return amount;
+    }, {})
+  );
+
+  const dispatch = useDispatch();
+
+  const handleAddProduct = (id) => {
+    dispatch(CartActions.addToCartRequest(id));
+  };
 
   const onSuccess = (data) => setProducts(data);
   const onError = (e) => alert(`Deu ruim: ${e}`);
   const onEnd = () => setLoading(false);
 
-  useEffect(async () => {
-    homePage({ onSuccess, onError, onEnd });
+  useEffect(() => {
+    const loadHomePage = async () => homePage({ onSuccess, onError, onEnd });
+
+    loadHomePage();
   }, []);
 
   if (loading) {
@@ -31,10 +45,10 @@ const Home = ({ addToCartRequest, cartAmount }) => {
           <strong>{product.title}</strong>
           <span>{product.priceFormatted}</span>
 
-          <button type='button' onClick={() => addToCartRequest(product.id)}>
+          <button type='button' onClick={() => handleAddProduct(product.id)}>
             <div>
               <MdAddShoppingCart size={16} color='#fff' />{' '}
-              {cartAmount[product.id] || 0}
+              {amount[product.id] || 0}
             </div>
 
             <span>ADICIONAR AO CARRINHO</span>
@@ -45,21 +59,8 @@ const Home = ({ addToCartRequest, cartAmount }) => {
   );
 };
 
-Home.propTypes = {
-  addToCartRequest: PropTypes.func,
-  cartAmount: PropTypes.object,
-};
-
-const mapStateToProps = (state) => ({
-  cartAmount: state.cart.reduce((amount, product) => {
-    amount[product.id] = product.amount;
-
-    return amount;
-  }, {}),
-});
-
 // parecido com o mapStateToProps, porem para as actions do redux
-const mapDispatchToProps = (dispatch) =>
-  bindActionCreators(CartActions, dispatch);
+// const mapDispatchToProps = (dispatch) =>
+//   bindActionCreators(CartActions, dispatch);
 
-export default connect(mapStateToProps, mapDispatchToProps)(Home);
+export default Home;

@@ -3,10 +3,11 @@ import { Link } from 'react-router-dom';
 import { Container, Cart } from './styles';
 import logo from '../../assets/images/logo.svg';
 import { MdShoppingBasket } from 'react-icons/md';
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
 
-function Header({ cartSize }) {
+function Header() {
+  const cartSize = useSelector((state) => state.cart.length);
+
   return (
     <Container>
       <Link to='/'>
@@ -24,12 +25,4 @@ function Header({ cartSize }) {
   );
 }
 
-Header.propTypes = {
-  cartSize: PropTypes.number,
-};
-
-const mapStateToProps = (state) => ({
-  cartSize: state.cart.length,
-});
-
-export default connect(mapStateToProps)(Header);
+export default Header;

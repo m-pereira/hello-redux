@@ -13,7 +13,7 @@ module.exports = {
     ecmaVersion: 12,
     sourceType: 'module',
   },
-  plugins: ['react'],
+  plugins: ['react', 'prettier', 'react-hooks'],
   rules: {
     'react/jsx-filename-extension': [
       'warn',
@@ -24,5 +24,7 @@ module.exports = {
     'import/prefer-default-export': 'off',
     'no-console': ['error', { allow: ['tron'] }],
     'no-param-reassing': 'off',
+    'react-hooks/rules-of-hooks': 'error',
+    'react-hooks/exhaustive-deps': 'warn',
   },
 };
